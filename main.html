@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ереван за 2 дня</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pomegranate: #C0392B;
+    --gold: #D4A843;
+    --stone: #8B7355;
+    --tuff: #C4A882;
+    --tuff-light: #EDE0CC;
+    --dark: #1A1410;
+    --mid: #3D2E22;
+    --text: #2C2018;
+    --text-soft: #6B5744;
+    --cream: #FAF5ED;
+    --white: #FDFAF5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  .hero {
+    min-height: 100svh; background: var(--dark); position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: clamp(2rem, 6vw, 5rem); overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 30%, rgba(192,57,43,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 20% 80%, rgba(212,168,67,0.12) 0%, transparent 50%),
+                linear-gradient(160deg, #1A1410 0%, #2C1810 50%, #1A1410 100%);
+  }
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff'%3E%3Cpath d='M30 0l4 8h8l-6.5 5 2.5 8L30 16.5 22 21l2.5-8L18 8h8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-ararat { position: absolute; bottom: 0; right: -2%; width: 55%; max-width: 600px; opacity: 0.07; }
+  .hero-tag { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; position: relative; animation: fadeUp 0.8s ease both; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 300; line-height: 0.9; color: var(--white); position: relative; animation: fadeUp 0.8s 0.1s ease both; }
+  .hero-title em { font-style: italic; color: var(--tuff); }
+  .hero-sub { font-size: clamp(0.85rem, 2vw, 1rem); font-weight: 300; color: rgba(255,255,255,0.45); margin-top: 1.5rem; max-width: 360px; line-height: 1.7; position: relative; animation: fadeUp 0.8s 0.2s ease both; }
+  .hero-scroll { position: absolute; bottom: 2.5rem; right: clamp(2rem, 6vw, 5rem); display: flex; align-items: center; gap: 0.75rem; color: rgba(255,255,255,0.3); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; animation: fadeUp 1s 0.5s ease both; }
+  .scroll-line { width: 40px; height: 1px; background: rgba(255,255,255,0.2); position: relative; overflow: hidden; }
+  .scroll-line::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--gold); animation: scanLine 2s 1s ease-in-out infinite; }
+
+  .day-nav { position: sticky; top: 0; z-index: 100; background: rgba(250,245,237,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(196,168,130,0.3); }
+  .day-nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 4rem); display: flex; align-items: center; gap: 2rem; height: 56px; }
+  .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; color: var(--mid); white-space: nowrap; flex-shrink: 0; }
+  .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-link { display: inline-flex; align-items: center; padding: 0.35rem 0.85rem; border-radius: 100px; font-size: 0.78rem; font-weight: 500; color: var(--text-soft); text-decoration: none; white-space: nowrap; transition: all 0.2s; border: 1px solid transparent; }
+  .nav-link:hover { background: var(--tuff-light); color: var(--mid); }
+  .nav-link.day-1 { color: var(--pomegranate); }
+  .nav-link.day-2 { color: var(--stone); }
+
+  .content { max-width: 1100px; margin: 0 auto; padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem); }
+
+  .day-header { display: flex; align-items: flex-start; gap: 2rem; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(196,168,130,0.4); }
+  .day-number { font-family: 'Cormorant Garamond', serif; font-size: clamp(4rem, 12vw, 7rem); font-weight: 300; line-height: 1; flex-shrink: 0; }
+  .day-number.d1 { color: var(--pomegranate); }
+  .day-number.d2 { color: var(--stone); }
+  .day-info { padding-top: 0.5rem; }
+  .day-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 0.5rem; }
+  .day-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 300; color: var(--mid); line-height: 1.2; }
+  .day-desc { margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-soft); line-height: 1.6; max-width: 500px; }
+
+  .places-grid { display: flex; flex-direction: column; gap: 0; }
+
+  .place-item { display: grid; grid-template-columns: 56px 1fr; gap: 0 1.5rem; position: relative; padding-bottom: 2.5rem; animation: fadeUp 0.6s ease both; }
+  .place-item:last-child { padding-bottom: 0; }
+  .place-item::before { content: ''; position: absolute; left: 27px; top: 56px; bottom: 0; width: 1px; background: linear-gradient(to bottom, rgba(196,168,130,0.5), rgba(196,168,130,0.1)); }
+  .place-item:last-child::before { display: none; }
+
+  .place-dot { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .dot-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; flex-shrink: 0; border: 1.5px solid; }
+  .d1 .dot-circle { background: rgba(192,57,43,0.08); border-color: rgba(192,57,43,0.3); color: var(--pomegranate); }
+  .d2 .dot-circle { background: rgba(139,115,85,0.08); border-color: rgba(139,115,85,0.3); color: var(--stone); }
+
+  .place-card { background: var(--white); border: 1px solid rgba(196,168,130,0.25); border-radius: 16px; overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; }
+  .place-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+
+  .place-photo-wrap { position: relative; overflow: hidden; height: 200px; background: var(--tuff-light); }
+  .place-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+  .place-card:hover .place-photo-wrap img { transform: scale(1.04); }
+
+  .place-card-inner { padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; }
+  .place-text { flex: 1; min-width: 0; }
+  .place-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .place-time { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; color: var(--text-soft); background: var(--tuff-light); padding: 0.2rem 0.6rem; border-radius: 100px; white-space: nowrap; }
+  .place-dur { font-size: 0.72rem; color: var(--text-soft); opacity: 0.7; }
+  .place-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 400; color: var(--mid); line-height: 1.2; margin-bottom: 0.45rem; }
+  .place-note { font-size: 0.85rem; color: var(--text-soft); line-height: 1.6; }
+  .place-tip { margin-top: 0.75rem; padding: 0.6rem 0.85rem; background: rgba(196,168,130,0.12); border-left: 2px solid var(--tuff); border-radius: 0 8px 8px 0; font-size: 0.8rem; color: var(--stone); line-height: 1.5; }
+  .place-rating { display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0; padding-top: 0.2rem; }
+  .star { color: var(--gold); font-size: 0.85rem; }
+  .rating-val { font-size: 0.8rem; font-weight: 600; color: var(--text-soft); }
+
+  .tag { display: inline-block; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.05em; padding: 0.15rem 0.55rem; border-radius: 100px; margin-right: 0.3rem; margin-top: 0.4rem; }
+  .tag-museum  { background: rgba(83,74,183,0.1);  color: #534AB7; }
+  .tag-view    { background: rgba(45,158,117,0.1);  color: #1D9E75; }
+  .tag-market  { background: rgba(186,117,23,0.1);  color: #BA7517; }
+  .tag-history { background: rgba(192,57,43,0.1);   color: var(--pomegranate); }
+  .tag-religion{ background: rgba(83,74,183,0.1);   color: #534AB7; }
+  .tag-nature  { background: rgba(45,158,117,0.1);  color: #1D9E75; }
+  .tag-food    { background: rgba(186,117,23,0.1);  color: #BA7517; }
+  .tag-outside { background: rgba(139,115,85,0.12); color: var(--stone); }
+
+  .section-divider { margin: 4rem 0; border: none; height: 1px; background: linear-gradient(to right, transparent, rgba(196,168,130,0.5), transparent); }
+
+  .tips-block { background: var(--dark); border-radius: 20px; padding: clamp(2rem, 5vw, 3.5rem); color: var(--white); margin-top: 4rem; }
+  .tips-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 300; margin-bottom: 0.5rem; color: var(--tuff); }
+  .tips-sub { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+  .tip-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; }
+  .tip-icon { font-size: 1.4rem; margin-bottom: 0.75rem; display: block; }
+  .tip-head { font-size: 0.8rem; font-weight: 600; color: var(--gold); margin-bottom: 0.35rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .tip-body { font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  footer { text-align: center; padding: 3rem 2rem; color: var(--text-soft); opacity: 0.5; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scanLine { 0% { left: -100%; } 50%, 100% { left: 100%; } }
+
+  .start-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2rem; padding: 0.5rem 1.2rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: all 0.2s; }
+  .start-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+
+  .day-section { margin-bottom: 5rem; }
+  .day-section:last-of-type { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .place-card-inner { flex-direction: column; gap: 0.75rem; }
+    .day-header { gap: 1rem; }
+    .hero-ararat { width: 80%; opacity: 0.05; }
+    .place-photo-wrap { height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <svg class="hero-ararat" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 300 L150 180 L220 210 L300 80 L380 200 L450 160 L600 300Z" fill="white"/>
+    <path d="M280 80 L300 30 L320 80Z" fill="white" opacity="0.6"/>
+  </svg>
+  <div style="position:relative">
+    <p class="hero-tag">Путеводитель · Армения</p>
+    <h1 class="hero-title">Ере<em>ван</em><br>за 2 дня</h1>
+    <p class="hero-sub">10 мест, которые нужно увидеть в первый раз — от розовых туфовых площадей до монастыря у подножия Арарата.</p>
+    <a href="#day1" class="start-btn">Начать маршрут ↓</a>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>листать</div>
+</section>
+
+<nav class="day-nav">
+  <div class="day-nav-inner">
+    <span class="nav-brand">Ереван</span>
+    <div class="nav-links">
+      <a class="nav-link day-1" href="#day1">День 1 · Центр</a>
+      <a class="nav-link day-2" href="#day2">День 2 · История</a>
+      <a class="nav-link" href="#tips">Советы</a>
+    </div>
+  </div>
+</nav>
+
+<main class="content">
+
+  <section class="day-section" id="day1">
+    <div class="day-header">
+      <div class="day-number d1">01</div>
+      <div class="day-info">
+        <p class="day-label">Первый день</p>
+        <h2 class="day-title">Сердце города</h2>
+        <p class="day-desc">Весь день пешком по центру — от главной площади через рынок ремёсел к гигантской лестнице Каскада с видом на весь Ереван.</p>
+      </div>
+    </div>
+
+    <div class="places-grid d1">
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">1</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZMJQKBwfhOHvdZ7_tBwVs6LimNCRQD4CMcFspLmakF_TAyERBopE3jDb2qUiTUvO-GVFNgkdOV01_Qwebf4D5sW3uDqwBjKJmUY50NlRyYXizqXgT1G4nMA0mlPfLjIIFYl6UFUPh2lwFT0X0onrmgs=s800-w800-h600" alt="Площадь Республики" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">10:00</span><span class="place-dur">~45 мин</span></div>
+              <h3 class="place-name">Площадь Республики</h3>
+              <p class="place-note">Сердце Еревана, окружённое зданиями из розового туфа. Стартовая точка любого визита — здесь чувствуется масштаб и характер города.</p>
+              <div><span class="tag tag-view">Панорама</span><span class="tag tag-history">Архитектура</span></div>
+              <div class="place-tip">⭐ Вечером возвращайтесь — здесь работают светомузыкальные фонтаны.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.8</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">2</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZNi5C0zdJFVPiXzcSJPiWzShWFxljDbmZTxcQAh3OJz-cyHUK2m4FjHhxVZY-n0W3WpCaYxcEH7Tqu2Y8Gb0YY2XnfgxcJjrm0ST2k1Un3JdLVDlEi6DyKPnqEq2DXKoqcrDHWIPoG89HUhxZo=s800-w800-h600" alt="Исторический музей" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">11:00</span><span class="place-dur">~1.5 ч</span></div>
+              <h3 class="place-name">Исторический музей Армении</h3>
+              <p class="place-note">Прямо на площади. Экспозиция от каменного века до советской эпохи — хорошее введение в историю страны перед прогулкой.</p>
+              <div><span class="tag tag-museum">Музей</span><span class="tag tag-history">История</span></div>
+              <div class="place-tip">🕐 Открыт вт–вс с 11:00. Вход — около 5$.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.4</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">3</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZPdQZxaoJDkBm1HfjRn32Li6xr0IFDIGyP0gu1mSbg-oV4QnSZwdrIdLw3TWNyr_XOvtTlolRfiuKSVQ6NCHNt6xovapppptIdN04kYxkVfSgS0VRIdEqD3X0ZWbRF7pAzwz1IYuQd2yzG-oeI=s800-w800-h600" alt="Голубая мечеть" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">13:30</span><span class="place-dur">~30 мин</span></div>
+              <h3 class="place-name">Голубая мечеть</h3>
+              <p class="place-note">Персидская архитектура XVIII века — тихий оазис в центре города. Сад с тутовыми деревьями и мозаичный фасад удивят даже бывалых путешественников.</p>
+              <div><span class="tag tag-religion">Мечеть</span><span class="tag tag-history">Архитектура</span></div>
+              <div class="place-tip">🔍 Нужно покрыть голову. Ищите арку — вход не очевиден с улицы.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">4</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZOvf7oXNy3f9wfBpa50WR1RjESet35KGA0DObNemMdb6kCUNFD6lYC5f3qJRtkLpna75kFrGnmtQ2VngZchRJAznmBz9IlxwqJ9kCI4_ArmMxMWnN7MrVYpFrhHf3ObY5EvnMWroWb9djxpPg=s800-w800-h600" alt="Вернисаж" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">14:30</span><span class="place-dur">~1 ч</span></div>
+              <h3 class="place-name">Вернисаж</h3>
+              <p class="place-note">Большой рынок ремёсел, живописи и сувениров. Серебряные украшения, деревянные нарды, армянские ковры и картины местных художников.</p>
+              <div><span class="tag tag-market">Рынок</span><span class="tag tag-market">Сувениры</span></div>
+              <div class="place-tip">📅 В субботу и воскресенье рынок работает дольше и богаче — лучшее время для визита.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">5</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZNdR9JBPXJQ2B48yBPcGhFJzL0J70_fp23Ck2U4GT-9h3ncXgZriDuAYPxV9u_r2dOR0bzYZ5DzwuLQrWoLrS55WRSUv3xwAaNR5uFnsLtssIBgj9dnC-Q8W7QOMvrBlk-dPvfb9EmT9P-46xg=s800-w800-h600" alt="Каскад" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">16:30</span><span class="place-dur">~1.5 ч</span></div>
+              <h3 class="place-name">Каскад</h3>
+              <p class="place-note">Гигантская лестница из 572 ступеней с галереями современного искусства внутри. Панорама с верхней точки — весь Ереван и, если повезёт с погодой, снежная вершина Арарата.</p>
+              <div><span class="tag tag-view">Панорама</span><span class="tag tag-museum">Искусство</span></div>
+              <div class="place-tip">🚀 Заходите слева — там эскалаторы. Снаружи скульптуры Бота и Жироду.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.7</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">6</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZNH5XofbIiQTo000Dy-TxPrQjyRrTZApM2xCxlTkRK1ilFkYq8Noy92Wf1X_XnYKc1lQSsVf8dJaUuHBC_ISPjsiIpA-III3A1fZJgqjn8D90leTBhUKH5xUIgX9cueAR37XcWs8CW8HxuwPQ=s800-w800-h600" alt="Парк влюблённых" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">18:30</span><span class="place-dur">~30 мин</span></div>
+              <h3 class="place-name">Парк влюблённых</h3>
+              <p class="place-note">Уютный парк рядом с Каскадом — хорошее место для вечерней прогулки перед ужином. Тихо, зелено, есть небольшое кафе.</p>
+              <div><span class="tag tag-nature">Парк</span><span class="tag tag-view">Прогулка</span></div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.6</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="day-section" id="day2">
+    <div class="day-header">
+      <div class="day-number d2">02</div>
+      <div class="day-info">
+        <p class="day-label">Второй день</p>
+        <h2 class="day-title">История и выезд</h2>
+        <p class="day-desc">День глубины — древние рукописи, мемориал памяти, коньяк «Арарат» и вечерняя вылазка к монастырю у подножия священной горы.</p>
+      </div>
+    </div>
+
+    <div class="places-grid d2">
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">1</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZNHty0NQHavjtCD1yqqnw9JxTV3-DeQkORm9twmvWJ84xKjaroCUlu6iOy6VtMbHOOBi9OOVjWyn9URflFgX3Q937bpiQ5Je7AKTdvryhwLwUJfGwGHOAcis_Cq9RS8l5c08Wfq5Iad6f0r=s800-w800-h600" alt="Матенадаран" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">10:00</span><span class="place-dur">~1.5 ч</span></div>
+              <h3 class="place-name">Матенадаран</h3>
+              <p class="place-note">Хранилище древних рукописей — одно из крупнейших в мире. Рукописи возрастом до 1600 лет, украшенные миниатюрами. Невозможно не впечатлиться.</p>
+              <div><span class="tag tag-museum">Музей</span><span class="tag tag-history">Рукописи</span></div>
+              <div class="place-tip">🕐 Закрыт в понедельник и воскресенье. Студенческий билет ~1$, взрослый ~3$.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.7</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">2</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZOknuIlqCXwgZSowwMb3uq_Zoi9fCuaWlWzBLywBH3i7-ffJNB77Ap4Js9CCbhrsp0Txvuo9d68yKtOiEmK6ZxX6M7uPSjdlTYBMsagkIXiX871jPx7_qlW3adRODW-PDaKS4rSe1OumciZBuw=s800-w800-h600" alt="Мемориал геноцида" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">12:00</span><span class="place-dur">~1.5 ч</span></div>
+              <h3 class="place-name">Мемориал геноцида армян</h3>
+              <p class="place-note">Место памяти — вечный огонь, 12 наклонных плит и музей. Глубокое и важное место. Нужно посетить с пониманием значимости.</p>
+              <div><span class="tag tag-history">Мемориал</span><span class="tag tag-museum">Музей</span></div>
+              <div class="place-tip">🚕 10 минут на такси от центра. Закрыт в понедельник. Вход бесплатный.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.8</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">3</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZN0Kan4xHeI7I_CkiMVJTOx_pSfUGqbk_UvUcjl99YpDY3mU1cugyjVN53kmGMeaInfwZh-2mC6YKa2_Ynk7FTJomsGcy7ia8NN-YcUBZ2ViCeWgd34O1GGAU0aErilguE_Jl3VGwcRy4_b84A=s800-w800-h600" alt="Коньячный завод Арарат" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">14:00</span><span class="place-dur">~1.5 ч</span></div>
+              <h3 class="place-name">Коньячный завод «Арарат»</h3>
+              <p class="place-note">Экскурсия по легендарному заводу с дегустацией коньяков выдержки 10, 15 и 20 лет. Гид объясняет весь процесс — от дистилляции до погреба.</p>
+              <div><span class="tag tag-food">Дегустация</span><span class="tag tag-museum">Экскурсия</span></div>
+              <div class="place-tip">📞 Работает только в будни. Бронируйте заранее — туры бывают заняты. Дети не допускаются.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.6</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-item">
+        <div class="place-dot"><div class="dot-circle">4</div></div>
+        <div class="place-card">
+          <div class="place-photo-wrap">
+            <img src="https://lh3.googleusercontent.com/place-photos/AJRVUZM7cSLTnZsrEwdcFqLW7zsKqOvSlVmYiW62afNY1iY77tsKMa60K_jL-bC9w9ucrd34lbC9ZFA57FtG59loVs-Djik9s9yEgQzvg5_kYYgK9PKo0nBgsjKk8OEzSu7vaP5DvRaaS0wMm_PkaAE=s800-w720-h486" alt="Хор Вирап" loading="lazy">
+          </div>
+          <div class="place-card-inner">
+            <div class="place-text">
+              <div class="place-meta"><span class="place-time">16:30</span><span class="place-dur">~1 ч на месте</span></div>
+              <h3 class="place-name">Монастырь Хор Вирап</h3>
+              <p class="place-note">~45 минут от Еревана на такси. Древний монастырь V века с одним из самых иконичных видов Армении — на гору Арарат. Особенно красив на закате.</p>
+              <div><span class="tag tag-outside">Выезд</span><span class="tag tag-religion">Монастырь</span><span class="tag tag-view">Арарат</span></div>
+              <div class="place-tip">☀️ Вид зависит от погоды — лучше ехать в ясный день. Попросите таксиста подождать.</div>
+            </div>
+            <div class="place-rating"><span class="star">★</span><span class="rating-val">4.8</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="tips">
+    <div class="tips-block">
+      <h2 class="tips-title">Полезно знать</h2>
+      <p class="tips-sub">Несколько советов перед поездкой</p>
+      <div class="tips-grid">
+        <div class="tip-item"><span class="tip-icon">🚕</span><div class="tip-head">Транспорт</div><div class="tip-body">Центр удобно обходить пешком. Для дальних точек — Yandex Taxi или Gg Taxi, приложения работают отлично.</div></div>
+        <div class="tip-item"><span class="tip-icon">💵</span><div class="tip-head">Деньги</div><div class="tip-body">Местная валюта — армянский драм (AMD). Карты принимают почти везде, но наличные пригодятся на рынке Вернисаж.</div></div>
+        <div class="tip-item"><span class="tip-icon">🍽️</span><div class="tip-head">Еда</div><div class="tip-body">Попробуйте хаш (суп), кюфту и долму. Район Северного проспекта — хороший выбор ресторанов.</div></div>
+        <div class="tip-item"><span class="tip-icon">🌤️</span><div class="tip-head">Арарат</div><div class="tip-body">Гора видна из города, но только в ясную погоду. Утром вероятность выше — туман нарастает к полудню.</div></div>
+        <div class="tip-item"><span class="tip-icon">📅</span><div class="tip-head">Выходные музеев</div><div class="tip-body">Матенадаран и Исторический музей закрыты в понедельник. Мемориал тоже. Планируйте заранее.</div></div>
+        <div class="tip-item"><span class="tip-icon">🌸</span><div class="tip-head">Лучшее время</div><div class="tip-body">Апрель–июнь и сентябрь–октябрь — идеальный климат. Летом жарко, зимой морозно, но красиво.</div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Ереван ждёт — приятного путешествия</footer>
+
+</body>
+</html>
